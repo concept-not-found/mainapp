@@ -16,7 +16,6 @@
   "rules": {
   },
   "globals": {
-    "import": true,
     "requestAnimationFrame": true
   }
 }

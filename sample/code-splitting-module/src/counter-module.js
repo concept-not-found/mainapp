@@ -1,6 +1,6 @@
-import {h, Module, App} from '../../..'
+import {h, Module} from '../../..'
 
-const Main = Module({
+export default Module({
   count: 0,
   down ({count}, value) {
     return {
@@ -20,5 +20,3 @@ const Main = Module({
     </div>
   }
 })
-
-App(Main, document.getElementById('mainapp-entry'))

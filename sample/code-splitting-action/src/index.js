@@ -1,4 +1,4 @@
-import {h, Module, App} from '../../../index.js'
+import {h, Module, App} from '../../..'
 
 const Main = Module({
   count: 1,
