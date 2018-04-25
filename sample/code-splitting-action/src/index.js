@@ -1,7 +1,7 @@
 import {h, Module, App} from '../../../index.js'
 
-const Counter = Module({
-  count: 0,
+const Main = Module({
+  count: 1,
   down ({count}, value) {
     return {
       count: count - value
@@ -12,23 +12,19 @@ const Counter = Module({
       count: count + value
     }
   },
-  view ({count, down, up}, {name}) {
+  async loadDouble () {
+    const {default: double} = await import('./double-action')
+    return {
+      double
+    }
+  },
+  view ({count, down, up, loadDouble, double}) {
     return <div>
-      <h1>{name}: {count}</h1>
+      <h1>{count}</h1>
       <button onclick={() => down(1)}>-</button>
       <button onclick={() => up(1)}>+</button>
-    </div>
-  }
-})
-
-const Main = Module({
-  first: Counter,
-  second: Counter,
-  view ({first, second}) {
-    return <div>
-      <first.view name="first" />
-      <second.view name="second" />
-      <p>Sum - {first.count + second.count}</p>
+      <button onclick={loadDouble} disabled={double}>Load double</button>
+      <button onclick={double} disabled={!double}>Double</button>
     </div>
   }
 })

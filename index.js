@@ -10,32 +10,36 @@ function crappyDeepClone (value) {
   return JSON.parse(JSON.stringify(value))
 }
 
+function wireSpecification (onStateUpdate, specification, state = {}) {
+  for (const key in specification) {
+    const value = specification[key]
+    if (typeof value === 'function') {
+      if (key === 'view') {
+        state[key] = (props) => value(state, props)
+      } else { // action
+        state[key] = async (parameter) => {
+          const update = await value(state, parameter)
+          Object.assign(state, wireSpecification(onStateUpdate, update, state))
+          onStateUpdate()
+        }
+      }
+    } else if (value instanceof ModuleFactory) {
+      state[key] = value.create(onStateUpdate)
+    } else { // data
+      state[key] = crappyDeepClone(value)
+    }
+  }
+  return state
+}
+
+// we use a class to be able to instanceof it later
 class ModuleFactory {
   constructor (specification) {
     this.specification = specification
   }
 
   create (onStateUpdate) {
-    const state = {}
-    for (const key in this.specification) {
-      const value = this.specification[key]
-      if (typeof value === 'function') {
-        if (key === 'view') {
-          state[key] = (props) => value(state, props)
-        } else {
-          state[key] = async (parameter) => {
-            const update = await value(state, parameter)
-            Object.assign(state, update)
-            onStateUpdate()
-          }
-        }
-      } else if (value instanceof ModuleFactory) {
-        state[key] = value.create(onStateUpdate)
-      } else {
-        state[key] = crappyDeepClone(value)
-      }
-    }
-    return state
+    return wireSpecification(onStateUpdate, this.specification)
   }
 }
 

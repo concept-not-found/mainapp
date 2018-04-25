@@ -22,7 +22,8 @@ module.exports = {
               ['@babel/transform-react-jsx', {
                 pragma: 'h'
               }],
-              '@babel/plugin-transform-spread'
+              '@babel/plugin-transform-spread',
+              '@babel/plugin-syntax-dynamic-import'
             ]
           }
         }
