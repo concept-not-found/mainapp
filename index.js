@@ -1,33 +1,27 @@
 import * as Ultradom from 'ultradom'
 
-export function h(name, attributes, ...children) {
+export function h (name, attributes, ...children) {
   return typeof name === 'function'
     ? name(attributes, children)
     : Ultradom.h(name, attributes, children)
 }
 
-function crappyDeepClone(value) {
+function crappyDeepClone (value) {
   return JSON.parse(JSON.stringify(value))
 }
 
-export function Module(specification) {
-  if (!specification.view) {
-    throw new Error('module specification requires view(state), but view was not found')
-  }
-  if (typeof specification.view !== 'function') {
-    throw new Error(`module specification requires view(state) to be a function, but view was a ${typeof specification.view}`)
+class ModuleFactory {
+  constructor (specification) {
+    this.specification = specification
   }
 
-  function moduleFactory(onStateUpdate) {
+  create (onStateUpdate) {
     const state = {}
-    for (const key in specification) {
-      const value = specification[key]
+    for (const key in this.specification) {
+      const value = this.specification[key]
       if (typeof value === 'function') {
         if (key === 'view') {
           state[key] = (props) => value(state, props)
-        } else if (value.moduleFactory) {
-          const module = 
-          state[key] = value(onStateUpdate)
         } else {
           state[key] = async (parameter) => {
             const update = await value(state, parameter)
@@ -35,22 +29,33 @@ export function Module(specification) {
             onStateUpdate()
           }
         }
+      } else if (value instanceof ModuleFactory) {
+        state[key] = value.create(onStateUpdate)
       } else {
         state[key] = crappyDeepClone(value)
       }
     }
     return state
   }
-  moduleFactory.moduleFactory = true
-  return moduleFactory
 }
 
-export function App(moduleFactory, container) {
+export function Module (specification) {
+  if (!specification.view) {
+    throw new Error('module specification requires view(state), but view was not found')
+  }
+  if (typeof specification.view !== 'function') {
+    throw new Error(`module specification requires view(state) to be a function, but view was a ${typeof specification.view}`)
+  }
+
+  return new ModuleFactory(specification)
+}
+
+export function App (moduleFactory, container) {
   let mainModule
-  function onStateUpdate() {
+  function onStateUpdate () {
     requestAnimationFrame(() => Ultradom.render(mainModule.view(), container))
   }
-  mainModule = moduleFactory(onStateUpdate)
+  mainModule = moduleFactory.create(onStateUpdate)
   onStateUpdate()
   return mainModule
 }
