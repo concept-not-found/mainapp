@@ -25,6 +25,10 @@ function wireSpecification (onStateUpdate, specification, state = {}) {
       }
     } else if (value instanceof ModuleFactory) {
       state[key] = value.create(onStateUpdate)
+    } else if (value instanceof Array) {
+      state[key] = value.map((arrayValue) => arrayValue instanceof ModuleFactory
+        ? arrayValue.create(onStateUpdate)
+        : arrayValue)
     } else { // data
       state[key] = crappyDeepClone(value)
     }
@@ -54,12 +58,11 @@ export function Module (specification) {
   return new ModuleFactory(specification)
 }
 
-export function App (moduleFactory, container) {
+export function App (mainModuleFactory, container) {
   let mainModule
-  function onStateUpdate () {
+  function render () {
     requestAnimationFrame(() => Ultradom.render(mainModule.view(), container))
   }
-  mainModule = moduleFactory.create(onStateUpdate)
-  onStateUpdate()
-  return mainModule
+  mainModule = mainModuleFactory.create(render)
+  render()
 }
