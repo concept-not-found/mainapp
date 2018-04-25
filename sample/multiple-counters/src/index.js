@@ -1,6 +1,6 @@
 import {h, Module, App} from '../../../index.js'
 
-const Main = Module({
+const Counter = Module({
   count: 0,
   down({count}, value) {
     return {
@@ -12,11 +12,23 @@ const Main = Module({
       count: count + value
     }
   },
-  view({count, down, up}) {
+  view({count, down, up}, {name}) {
     return <div>
-      <h1>{count}</h1>
+      <h1>{name}: {count}</h1>
       <button onclick={() => down(1)}>-</button>
       <button onclick={() => up(1)}>+</button>
+    </div>
+  }
+})
+
+const Main = Module({
+  FirstCounter: Counter,
+  SecondCounter: Counter,
+  view({FirstCounter, SecondCounter}) {
+    return <div>
+      <FirstCounter.view name="first" />
+      <SecondCounter.view name="second" />
+      <p>Sum - {FirstCounter.count + SecondCounter.count}</p>
     </div>
   }
 })
