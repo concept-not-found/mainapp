@@ -2,6 +2,10 @@
   "extends": [
     "standard"
   ],
+  "env": {
+    "jest": true,
+    "node": true
+  },
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2017,
@@ -13,6 +17,9 @@
     },
     "sourceType": "module"
   },
+  "plugins": [
+    "react"
+  ],
   "rules": {
   },
   "globals": {

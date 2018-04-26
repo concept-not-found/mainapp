@@ -9,7 +9,9 @@
   },
   "author": "Ronald Chen",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "babel-polyfill": "6.26.0"
+  },
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.46",
     "@babel/core": "7.0.0-beta.46",

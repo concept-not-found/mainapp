@@ -2,7 +2,8 @@
   "rules": {
     "no-unused-vars": ["error", {
       "varsIgnorePattern": "^h$"
-    }]
+    }],
+    "react/jsx-uses-vars": "error"
   },
   "globals": {
     "import": true

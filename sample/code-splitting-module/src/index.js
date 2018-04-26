@@ -2,7 +2,7 @@ import {h, Module, App} from '../../..'
 
 const Main = Module({
   async loadCounter () {
-    const {default: Counter} = await import('./counter-module')
+    const {default: Counter} = await import('./Counter')
     return {
       counter: Counter
     }

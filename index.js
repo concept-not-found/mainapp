@@ -1,10 +1,4 @@
-import * as Ultradom from 'ultradom'
-
-export function h (name, attributes, ...children) {
-  return typeof name === 'function'
-    ? name(attributes, children)
-    : Ultradom.h(name, attributes, children)
-}
+const Ultradom = require('ultradom')
 
 function crappyDeepClone (value) {
   return JSON.parse(JSON.stringify(value))
@@ -39,30 +33,42 @@ function wireSpecification (onStateUpdate, specification, state = {}) {
 // we use a class to be able to instanceof it later
 class ModuleFactory {
   constructor (specification) {
-    this.specification = specification
+    this.spec = specification
   }
 
   create (onStateUpdate) {
-    return wireSpecification(onStateUpdate, this.specification)
+    return wireSpecification(onStateUpdate, this.spec)
+  }
+
+  get specification () {
+    return this.spec
   }
 }
 
-export function Module (specification) {
-  if (!specification.view) {
-    throw new Error('module specification requires view(state), but view was not found')
-  }
-  if (typeof specification.view !== 'function') {
-    throw new Error(`module specification requires view(state) to be a function, but view was a ${typeof specification.view}`)
-  }
+module.exports = {
+  h (name, attributes, ...children) {
+    return typeof name === 'function'
+      ? name(attributes, children)
+      : Ultradom.h(name, attributes, children)
+  },
 
-  return new ModuleFactory(specification)
-}
+  Module (specification) {
+    if (!specification.view) {
+      throw new Error('module specification requires view(state), but view was not found')
+    }
+    if (typeof specification.view !== 'function') {
+      throw new Error(`module specification requires view(state) to be a function, but view was a ${typeof specification.view}`)
+    }
 
-export function App (mainModuleFactory, container) {
-  let mainModule
-  function render () {
-    requestAnimationFrame(() => Ultradom.render(mainModule.view(), container))
+    return new ModuleFactory(specification)
+  },
+
+  App (mainModuleFactory, container) {
+    let mainModule
+    function render () {
+      requestAnimationFrame(() => Ultradom.render(mainModule.view(), container))
+    }
+    mainModule = mainModuleFactory.create(render)
+    render()
   }
-  mainModule = mainModuleFactory.create(render)
-  render()
 }

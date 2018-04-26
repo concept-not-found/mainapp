@@ -28,7 +28,7 @@ const Main = Module({
     return <div>
       <first.view name="first" />
       <second.view name="second" />
-      <p>Sum - {first.count + second.count}</p>
+      <p>Sum: {first.count + second.count}</p>
     </div>
   }
 })

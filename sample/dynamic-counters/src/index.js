@@ -50,7 +50,7 @@ const Main = Module({
           <button style="margin-bottom: 20px;" onclick={() => removeCounter(counter.id)}>Remove counter #{counter.id}</button>
         </div>)}
       </div>
-      <p>Sum - {counters.reduce((sum, {count}) => sum + count, 0)}</p>
+      <p>Sum: {counters.reduce((sum, {count}) => sum + count, 0)}</p>
     </div>
   }
 })
