@@ -1,6 +1,6 @@
 import {h, Component, App} from '../../..'
 
-const counterSpecification = {
+const Counter = Component({
   count: 0,
   down ({count}, value) {
     return {
@@ -19,7 +19,7 @@ const counterSpecification = {
       <button onclick={() => up(1)}>+</button>
     </div>
   }
-}
+})
 
 const Main = Component({
   nextCounterId: 0,
@@ -30,8 +30,7 @@ const Main = Component({
       nextCounterId: id + 1,
       counters: [
         ...counters,
-        Component({
-          ...counterSpecification,
+        Counter.extend({
           id
         })
       ]

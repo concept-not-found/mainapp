@@ -40,6 +40,13 @@ class ComponentFactory {
     return wireSpecification(onStateUpdate, this.spec)
   }
 
+  extend (additionalSpecification) {
+    if (additionalSpecification.view && typeof additionalSpecification.view !== 'function') {
+      throw new Error(`component specification requires view(state) to be a function, but view was a ${typeof additionalSpecification.view}`)
+    }
+    return new ComponentFactory(Object.assign({}, this.spec, additionalSpecification))
+  }
+
   get specification () {
     return this.spec
   }
