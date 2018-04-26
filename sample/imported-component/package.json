@@ -1,11 +1,12 @@
 {
-  "name": "mainapp-sample-dynamic-counters",
+  "name": "mainapp-sample-imported-component",
   "private": true,
   "description": "",
   "scripts": {
     "prebuild": "rimraf dist/",
     "build": "NODE_ENV=production webpack --mode production",
-    "start": "webpack-dev-server --compress --progress --colors --host localhost"
+    "start": "webpack-dev-server --compress --progress --colors --host localhost",
+    "test": "jest"
   },
   "author": "Ronald Chen",
   "license": "ISC",
@@ -18,11 +19,20 @@
     "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.46",
     "@babel/plugin-transform-react-jsx": "7.0.0-beta.46",
     "@babel/preset-env": "7.0.0-beta.46",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "22.4.3",
     "babel-loader": "8.0.0-beta.2",
     "html-webpack-plugin": "3.0.6",
+    "jest": "22.4.3",
     "rimraf": "2.6.2",
     "webpack": "4.1.1",
     "webpack-cli": "2.0.11",
     "webpack-dev-server": "3.1.1"
+  },
+  "jest": {
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
   }
 }
