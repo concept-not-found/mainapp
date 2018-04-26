@@ -1,8 +1,8 @@
-import {h, Module, App} from '../../..'
+import {h, Component, App} from '../../..'
 
 import Counter from './Counter'
 
-const Main = Module({
+const Main = Component({
   counter: Counter,
   view ({counter}) {
     return <div>

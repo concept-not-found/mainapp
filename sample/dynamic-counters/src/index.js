@@ -1,4 +1,4 @@
-import {h, Module, App} from '../../..'
+import {h, Component, App} from '../../..'
 
 const counterSpecification = {
   count: 0,
@@ -21,7 +21,7 @@ const counterSpecification = {
   }
 }
 
-const Main = Module({
+const Main = Component({
   nextCounterId: 0,
   counters: [],
   addCounter ({nextCounterId, counters}) {
@@ -30,9 +30,10 @@ const Main = Module({
       nextCounterId: id + 1,
       counters: [
         ...counters,
-        Module(Object.assign(counterSpecification, {
+        Component({
+          ...counterSpecification,
           id
-        }))
+        })
       ]
     }
   },

@@ -1,6 +1,6 @@
-import {h, Module, App} from '../../..'
+import {h, Component, App} from '../../..'
 
-const Counter = Module({
+const Counter = Component({
   count: 0,
   down ({count}, value) {
     return {
@@ -21,7 +21,7 @@ const Counter = Module({
   }
 })
 
-const Main = Module({
+const Main = Component({
   first: Counter,
   second: Counter,
   view ({first, second}) {

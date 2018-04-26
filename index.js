@@ -17,10 +17,10 @@ function wireSpecification (onStateUpdate, specification, state = {}) {
           onStateUpdate()
         }
       }
-    } else if (value instanceof ModuleFactory) {
+    } else if (value instanceof ComponentFactory) {
       state[key] = value.create(onStateUpdate)
     } else if (value instanceof Array) {
-      state[key] = value.map((arrayValue) => arrayValue instanceof ModuleFactory
+      state[key] = value.map((arrayValue) => arrayValue instanceof ComponentFactory
         ? arrayValue.create(onStateUpdate)
         : arrayValue)
     } else { // data
@@ -31,7 +31,7 @@ function wireSpecification (onStateUpdate, specification, state = {}) {
 }
 
 // we use a class to be able to instanceof it later
-class ModuleFactory {
+class ComponentFactory {
   constructor (specification) {
     this.spec = specification
   }
@@ -52,23 +52,23 @@ module.exports = {
       : Ultradom.h(name, attributes, children)
   },
 
-  Module (specification) {
+  Component (specification) {
     if (!specification.view) {
-      throw new Error('module specification requires view(state), but view was not found')
+      throw new Error('component specification requires view(state), but view was not found')
     }
     if (typeof specification.view !== 'function') {
-      throw new Error(`module specification requires view(state) to be a function, but view was a ${typeof specification.view}`)
+      throw new Error(`component specification requires view(state) to be a function, but view was a ${typeof specification.view}`)
     }
 
-    return new ModuleFactory(specification)
+    return new ComponentFactory(specification)
   },
 
-  App (mainModuleFactory, container) {
-    let mainModule
+  App (mainComponentFactory, container) {
+    let mainComponent
     function render () {
-      requestAnimationFrame(() => Ultradom.render(mainModule.view(), container))
+      requestAnimationFrame(() => Ultradom.render(mainComponent.view(), container))
     }
-    mainModule = mainModuleFactory.create(render)
+    mainComponent = mainComponentFactory.create(render)
     render()
   }
 }

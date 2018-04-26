@@ -1,6 +1,6 @@
-import {h, Module} from '../../..'
+import {h, Component} from '../../..'
 
-export default Module({
+export default Component({
   count: 0,
   down ({count}, value) {
     return {

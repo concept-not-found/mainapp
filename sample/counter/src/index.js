@@ -1,6 +1,6 @@
-import {h, Module, App} from '../../..'
+import {h, Component, App} from '../../..'
 
-const Main = Module({
+const Main = Component({
   count: 0,
   down ({count}, value) {
     return {
