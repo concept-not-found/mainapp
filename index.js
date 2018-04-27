@@ -7,8 +7,8 @@ function wireSpecification (onStateUpdate, specification, state = {}) {
       if (key === 'view') {
         state[key] = (props) => value(state, props)
       } else { // action
-        state[key] = async (parameter) => {
-          const update = await value(state, parameter)
+        state[key] = async (...parameters) => {
+          const update = await value(state, ...parameters)
           Object.assign(state, wireSpecification(onStateUpdate, update, state))
           onStateUpdate()
         }
@@ -66,13 +66,13 @@ module.exports = {
     return new ComponentFactory(specification)
   },
 
-  App (mainComponentFactory, container) {
-    let mainComponent
+  App (mainComponent, container) {
+    let mainComponentInstance
     function render () {
-      requestAnimationFrame(() => Ultradom.render(mainComponent.view(), container))
+      requestAnimationFrame(() => Ultradom.render(mainComponentInstance.view(), container))
     }
-    mainComponent = mainComponentFactory.create(render)
+    mainComponentInstance = mainComponent.create(render)
     render()
-    return mainComponent
+    return mainComponentInstance
   }
 }
