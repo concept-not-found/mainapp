@@ -1,4 +1,4 @@
-import {h, Component} from '../../..'
+import {h, Component} from '../../../..'
 
 export default Component({
   count: 0,

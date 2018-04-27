@@ -1,9 +1,5 @@
 const Ultradom = require('ultradom')
 
-function crappyDeepClone (value) {
-  return JSON.parse(JSON.stringify(value))
-}
-
 function wireSpecification (onStateUpdate, specification, state = {}) {
   for (const key in specification) {
     const value = specification[key]
@@ -24,7 +20,7 @@ function wireSpecification (onStateUpdate, specification, state = {}) {
         ? arrayValue.create(onStateUpdate)
         : arrayValue)
     } else { // data
-      state[key] = crappyDeepClone(value)
+      state[key] = value
     }
   }
   return state
@@ -77,5 +73,6 @@ module.exports = {
     }
     mainComponent = mainComponentFactory.create(render)
     render()
+    return mainComponent
   }
 }

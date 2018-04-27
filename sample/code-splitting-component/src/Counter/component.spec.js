@@ -1,4 +1,4 @@
-import Counter from './Counter'
+import Counter from './'
 
 describe('counter', () => {
   const specification = Counter.specification

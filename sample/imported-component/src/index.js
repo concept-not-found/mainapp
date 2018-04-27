@@ -5,9 +5,7 @@ import Counter from './Counter'
 const Main = Component({
   counter: Counter,
   view ({counter}) {
-    return <div>
-      <counter.view />
-    </div>
+    return <counter.view />
   }
 })
 
