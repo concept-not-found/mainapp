@@ -73,7 +73,7 @@ Actions are functions of the form `async actionName(state, ...parameters)`. Acti
 
 Since child components are on state, all data can be read off the the child and all actions on the child can be called.
 
-The `view` is a function of the form `view(state, props)`. The `view` uses the state to build the DOM fragment. The `view` can render data, bind actions to event handlers, and render child components using the form `<childComponent.view attributeKey="attributeValue">Grandchildren</childComponent.view>`. The child component receives attributes and children in the second argument of its own `view` function.
+The `view` is a function of the form `view(state, attributes, children)`. The `view` uses the state to build the DOM fragment. The `view` can render data, bind actions to event handlers, and render child components using the form `<childComponent.view attributeKey="attributeValue">Grandchildren</childComponent.view>`. The child component receives `attributes` and `children` in the last two arguments of its own `view` function.
 
 Components have their specification exposed as the `.specification` property. This is useful for unit testing.
 
