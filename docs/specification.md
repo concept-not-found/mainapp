@@ -3,11 +3,11 @@ In order make App more testable, we need to setup an internal api before we can 
 ```js
 > lastRendering = undefined
 > saveRendering = undefined
-> resetRenderer = () => {lastRendering = new Promise((resolve) => {saveRendering = (view) => {resolve(view); saveRendering = undefined}})}
+> resetTestRenderer = () => {lastRendering = new Promise((resolve) => {saveRendering = (view) => {resolve(view); saveRendering = undefined}})}
 > App = AppFactory((view) => () => saveRendering && saveRendering(view()))
 ```
 
-## `h(name, attributes, ...children)` specification
+## `h(name, attributes, ...children)`
 
 ### when `name` is a String, return a node  with name as the tag
 ```js
@@ -22,7 +22,7 @@ In order make App more testable, we need to setup an internal api before we can 
 'attributes: 1, children: 1'
 ```
 
-## `Component(specification)` specification
+## `Component(specification)`
 
 ### specification is available as a property
 ```js
@@ -59,13 +59,13 @@ Error code: ERROR_VIEW_NOT_FUNCTION
 
 ## view is required
 ```js
-> Component({}).specification
+> Component({})
 Error code: ERROR_VIEW_NOT_FOUND
 ```
 
 ## view must be a function
 ```js
-> Component({view: 'hello'}).specification
+> Component({view: 'hello'})
 Error code: ERROR_VIEW_NOT_FUNCTION
 ```
 
@@ -173,11 +173,11 @@ Resolve: 'Baby'
 Resolve: 'Baby'
 ```
 
-## `app(mainComponent, container)` specification
+## `app(mainComponent, container)`
 
 ### retuns the main component instance
 ```js
-> resetRenderer()
+> resetTestRenderer()
 > main = App(Component({wired: true, view({wired}) {return `wired: ${wired}`}}))
 > main.view()
 'wired: true'
@@ -185,7 +185,7 @@ Resolve: 'Baby'
 
 ### main component is rendered
 ```js
-> resetRenderer()
+> resetTestRenderer()
 > main = App(Component({view() {return 'hello'}}))
 > lastRendering
 Resolve: 'hello'
@@ -193,11 +193,11 @@ Resolve: 'hello'
 
 ### main component is re-rendered when state is updated
 ```js
-> resetRenderer()
+> resetTestRenderer()
 > main = App(Component({name: 'Bob', greet() {return {name: 'Alice'}}, view({name}) {return name}}))
 > lastRendering
 Resolve: 'Bob'
-> resetRenderer()
+> resetTestRenderer()
 > main.greet()
 > lastRendering
 Resolve: 'Alice'
