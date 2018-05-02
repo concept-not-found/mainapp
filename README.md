@@ -1,4 +1,4 @@
-# <img src="logo/monochrome.svg" width="486" height="142" />
+# <img src="logo/mono-white-outlined.svg" width="486" height="142" />
 
 *You are now in control*
 
