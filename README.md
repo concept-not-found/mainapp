@@ -1,5 +1,4 @@
-Mainapp
-=======
+# <img src="logo/monochrome.svg" width="486" height="142" />
 
 *You are now in control*
 
