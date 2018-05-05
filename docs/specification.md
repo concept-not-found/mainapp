@@ -6,7 +6,8 @@ In order make App more testable, we need to setup an internal api before we can 
 > resetTestRenderer = () => {
 ..  lastRendering = new Promise((resolve) => {
 ..    saveRendering = (view) => {
-..      resolve(view); saveRendering = undefined
+..      resolve(view)
+..      saveRendering = undefined
 ..    }
 ..  })
 ..}
