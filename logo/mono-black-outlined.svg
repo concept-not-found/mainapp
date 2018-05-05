@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg viewBox="0 0 486 142" xmlns="http://www.w3.org/2000/svg">
-<path d="m24 94v-46h26a16 16 0 0 1 16 16v30m0-30a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16v30" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
-<path d="m174 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16z" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
-<path d="m198 94v-46" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
+<path d="M24 94v-46h26a16 16 0 0 1 16 16v30m0-30a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16v30M174 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16zM198 94v-46M222 94v-46h26a16 16 0 0 1 16 16v30M330 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16zM354 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26M420 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
 <circle cx="198" cy="24" r="8" fill="#fff"/>
-<path d="m222 94v-46h26a16 16 0 0 1 16 16v30" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
-<path d="m330 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16z" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
-<path d="m354 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
-<path d="m420 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26" fill="none" stroke="#fff" stroke-linecap="round" stroke-width="16"/>
-<path d="m24 94v-46h26a16 16 0 0 1 16 16v30m0-30a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16v30" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
-<path d="m174 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16z" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
-<path d="m198 94v-46" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
+<path d="M24 94v-46h26a16 16 0 0 1 16 16v30m0-30a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16v30M174 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16zM198 94v-46M222 94v-46h26a16 16 0 0 1 16 16v30M330 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16zM354 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26M420 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
 <circle cx="198" cy="24" r="4" fill="#000"/>
-<path d="m222 94v-46h26a16 16 0 0 1 16 16v30" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
-<path d="m330 94h-26a16 16 0 0 1 -16 -16v-14a16 16 0 0 1 16 -16h10a16 16 0 0 1 16 16z" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
-<path d="m354 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
-<path d="m420 118v-70h26a16 16 0 0 1 16 16v14a16 16 0 0 1 -16 16h-26" fill="none" stroke="#000" stroke-linecap="round" stroke-width="8"/>
 </svg>
