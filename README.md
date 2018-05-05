@@ -51,13 +51,13 @@ The `view` shows the current count and two buttons to decrement and increment th
 Under the covers, Mainapp is using [Ultradom][1] for rendering and extends `h` to support function as child component.
 
 ### More samples
- * [Inline component](https://github.com/concept-not-found/mainapp/tree/master/sample/inline-component)
- * [Multiple components](https://github.com/concept-not-found/mainapp/tree/master/sample/multiple-components)
- * [Dynamic components](https://github.com/concept-not-found/mainapp/tree/master/sample/dynamic-components)
- * [Imported component](https://github.com/concept-not-found/mainapp/tree/master/sample/imported-component)
- * [Code splitting actions](https://github.com/concept-not-found/mainapp/tree/master/sample/code-splitting-action)
- * [Code splitting component](https://github.com/concept-not-found/mainapp/tree/master/sample/code-splitting-component)
- * [Dependency injection](https://github.com/concept-not-found/mainapp/tree/master/sample/dependency-injection)
+ * [Inline component](https://github.com/concept-not-found/mainapp-samples/tree/master/inline-component)
+ * [Multiple components](https://github.com/concept-not-found/mainapp-samples/tree/master/multiple-components)
+ * [Dynamic components](https://github.com/concept-not-found/mainapp-samples/tree/master/dynamic-components)
+ * [Imported component](https://github.com/concept-not-found/mainapp-samples/tree/master/imported-component)
+ * [Code splitting actions](https://github.com/concept-not-found/mainapp-samples/tree/master/code-splitting-action)
+ * [Code splitting component](https://github.com/concept-not-found/mainapp-samples/tree/master/code-splitting-component)
+ * [Dependency injection](https://github.com/concept-not-found/mainapp-samples/tree/master/dependency-injection)
 
 API
 ---
