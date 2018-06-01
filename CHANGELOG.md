@@ -1,3 +1,6 @@
+## 3.0.1 (June 1, 2018)
+ * fixed readme images for npm
+
 ## 3.0.0 (June 1, 2018)
  * replaced Component with plain old object
  * added $global and $parent references to state
