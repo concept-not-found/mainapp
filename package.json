@@ -1,6 +1,6 @@
 {
   "name": "mainapp",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Mainapp is a micro web application framework",
   "main": "index.js",
   "scripts": {
