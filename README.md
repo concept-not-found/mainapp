@@ -1,4 +1,4 @@
-# <img src="logo/mono-white-outlined.svg" width="486" height="142"/>
+# <img src="https://cdn.rawgit.com/concept-not-found/mainapp/0b139598/logo/mono-white-outlined.svg" width="486" height="142"/>
 
 *You are now in control*
 
@@ -37,7 +37,7 @@ App({
 
 Main loop
 ---------
-<img src="docs/main-loop.svg" width="512" height="512"/>
+<img src="https://cdn.rawgit.com/concept-not-found/mainapp/0b139598/docs/main-loop.svg" width="512" height="512"/>
 
 All webapps have the same main loop. Let's learn how `mainapp` implements the main loop.
 
