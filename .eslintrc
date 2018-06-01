@@ -6,16 +6,13 @@
     "jest": true,
     "node": true
   },
-  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaVersion": 2017,
     "ecmaFeatures": {
       "jsx": true,
       "templateStrings": true,
-      "classes": true,
-      "modules": true
-    },
-    "sourceType": "module"
+      "classes": true
+    }
   },
   "plugins": [
     "react"

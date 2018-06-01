@@ -1,71 +1,58 @@
+const isPlainObject = require('is-plain-object')
 
-function wireSpecification (onStateUpdate, specification, state = {}) {
-  for (const key in specification) {
-    const value = specification[key]
-    if (typeof value === 'function') {
-      if (key === 'view') {
+module.exports = (onStateUpdate, mainSpecification) => {
+  const $global = {}
+  function wireSpecification (specification, state) {
+    for (const key in specification) {
+      const value = specification[key]
+      if (value === undefined) {
+        delete state[key]
+      } else if (key === 'view') {
         state[key] = (attributes, children) => value(state, attributes, children)
-      } else { // action
+      } else if (typeof value === 'function') {
         state[key] = async (...parameters) => {
           const update = await value(state, ...parameters)
-          Object.assign(state, wireSpecification(onStateUpdate, update, state))
+          if (!update) {
+            return
+          }
+          const parentUpdate = update.$parent
+          delete update.$parent
+          const globalUpdate = update.$global
+          delete update.$global
+
+          wireSpecification(update, state)
+          if (parentUpdate && state.$parent) {
+            wireSpecification(parentUpdate, state.$parent)
+          }
+          if (globalUpdate) {
+            wireSpecification(globalUpdate, $global)
+          }
           onStateUpdate()
         }
+      } else if (isPlainObject(value)) {
+        if (isPlainObject(state[key])) {
+          wireSpecification(value, state[key])
+        } else {
+          const childState = {}
+          Object.defineProperty(childState, '$global', {
+            value: $global,
+            enumerable: false,
+            writeable: false,
+            configurable: false
+          })
+          Object.defineProperty(childState, '$parent', {
+            value: state,
+            enumerable: false,
+            writeable: false,
+            configurable: false
+          })
+          state[key] = wireSpecification(value, childState)
+        }
+      } else { // data
+        state[key] = value
       }
-    } else if (value instanceof ComponentFactory) {
-      state[key] = value.create(onStateUpdate)
-    } else if (value instanceof Array) {
-      state[key] = value.map((arrayValue) => arrayValue instanceof ComponentFactory
-        ? arrayValue.create(onStateUpdate)
-        : arrayValue)
-    } else { // data
-      state[key] = value
     }
+    return state
   }
-  return state
-}
-
-function viewRequired () {
-  const error = new Error('component specification requires view, but view was not found')
-  error.code = 'ERROR_VIEW_NOT_FOUND'
-  return error
-}
-
-function viewMustBeFunctionButWas (badView) {
-  const error = new Error(`component specification requires view to be a function, but view was a ${typeof badView}`)
-  error.code = 'ERROR_VIEW_NOT_FUNCTION'
-  return error
-}
-
-// we use a class to be able to instanceof it later
-class ComponentFactory {
-  constructor (specification) {
-    this.spec = specification
-  }
-
-  create (onStateUpdate) {
-    return wireSpecification(onStateUpdate, this.spec)
-  }
-
-  extend (additionalSpecification) {
-    if (additionalSpecification.view && typeof additionalSpecification.view !== 'function') {
-      throw viewMustBeFunctionButWas(additionalSpecification.view)
-    }
-    return new ComponentFactory(Object.assign({}, this.spec, additionalSpecification))
-  }
-
-  get specification () {
-    return this.spec
-  }
-}
-
-module.exports = (specification) => {
-  if (!specification.view) {
-    throw viewRequired()
-  }
-  if (typeof specification.view !== 'function') {
-    throw viewMustBeFunctionButWas(specification.view)
-  }
-
-  return new ComponentFactory(specification)
+  return wireSpecification(mainSpecification, $global)
 }

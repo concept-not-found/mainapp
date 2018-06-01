@@ -14,9 +14,7 @@ In order make App more testable, we need to setup an internal api before we can 
 > App = AppFactory((view) => () => saveRendering && saveRendering(view()))
 ```
 
-## `h(name, attributes, ...children)`
-
-### when `name` is a String, return a node  with name as the tag
+### when `name` is a String, return a node with name as the tag
 ```js
 > h('p', {
 ..  style: {
@@ -46,198 +44,120 @@ In order make App more testable, we need to setup an internal api before we can 
 'attributes: 1, children: 1'
 ```
 
-## `Component(specification)`
-
-### specification is available as a property
-```js
-> givenSpecification = {
-..  view() {
-..  }
-..}
-> Component(givenSpecification).specification === givenSpecification
-true
-```
-
-## extending a specification returns a new component
-```js
-> Component({
-..  view() {
-..  }
-..}).extend({moar: 'yes'}).specification.moar
-'yes'
-```
-
-## extending a specification does not modify the original
-```js
-> givenSpecification = {
-..  view() {
-..  }
-..}
-> Component(givenSpecification).extend({moar: 'yes'})
-> givenSpecification.moar
-undefined
-```
-
-## extending a specification can overwrite exiting values
-```js
-> Component({
-..  count: 10,
-..  view() {
-..  }
-..}).extend({count: 42}).specification.count
-42
-```
-
-## extending a specification and overwriting view will fail if view is not a function
-```js
-> Component({
-..  view() {
-..  }
-..}).extend({view: 'nope'})
-Error code: ERROR_VIEW_NOT_FUNCTION
-```
-
-## view is required
-```js
-> Component({})
-Error code: ERROR_VIEW_NOT_FOUND
-```
-
-## view must be a function
-```js
-> Component({
-..  view: 'hello'
-..})
-Error code: ERROR_VIEW_NOT_FUNCTION
-```
-
 ## view has access to state
 ```js
-> App(Component({
+> App({
 ..  message: 'hello',
 ..  view({message}) {
 ..    return message
 ..  }
-..})).view()
+..}).view()
 'hello'
 ```
 
 ## view has access to attributes from parent
 JSX: `<child.view key="value" />`
 ```js
-> child = Component({
+> child = {
 ..  name: 'Child',
 ..  view(state, attributes) {
 ..    return JSON.stringify(attributes)
 ..  }
-..})
-> App(Component({
+..}
+> App({
 ..  child,
 ..  view({child}) {
 ..    return h(child.view, {
 ..      key: 'value'
 ..    })
 ..  }
-..})).view()
+..}).view()
 '{"key":"value"}'
 ```
 
 ## view has access to children from parent
 JSX: `<child.view>mine</child.view>`
 ```js
-> child = Component({
+> child = {
 ..  name: 'Child',
 ..  view(state, attributes, children) {
 ..    return JSON.stringify(children)
 ..  }
-..})
-> App(Component({
+..}
+> App({
 ..  child,
 ..  view({child}) {
 ..    return h(child.view, {}, 'mine')
 ..  }
-..})).view()
+..}).view()
 '["mine"]'
 ```
 
 ## actions have access to state
 ```js
-> component = App(Component({
+> component = App({
 ..  count: 10,
 ..  up({count}) {
 ..    return {
 ..      count: count + 1
 ..    }
-..  },
-..  view() {
 ..  }
-..}))
+..})
 > component.up().then(() => component.count)
 Resolve: 11
 ```
 
 ## actions can have parameters
 ```js
-> component = App(Component({
+> component = App({
 ..  count: 100,
 ..  setCount(state, value) {
 ..    return {
 ..      count: value
 ..    }
-..  },
-..  view() {
 ..  }
-..}))
+..})
 > component.setCount(9000).then(() => component.count)
 Resolve: 9000
 ```
 
 ## actions can update state
 ```js
-> component = App(Component({
+> component = App({
 ..  name: 'Bob',
 ..  greet(state) {
 ..    return {
 ..      name: 'Alice'
 ..    }
-..  },
-..  view() {
 ..  }
-..}))
+..})
 > component.greet().then(() => component.name)
 Resolve: 'Alice'
 ```
 
 ## actions can be asynchronous
 ```js
-> component = App(Component({
+> component = App({
 ..  name: 'Bob',
 ..  async greet(state) {
 ..    return Promise.resolve({
 ..      name: 'Alice'
 ..    })
-..  },
-..   view() {
-..   }
-..}))
+..  }
+..})
 > component.greet().then(() => component.name)
 Resolve: 'Alice'
 ```
 
-## parent component can access child components state
+## parent component have access to child state
 ```js
-> child = Component({
-..  name: 'Child',
-..  view() {
-..  }
-..})
-> component = App(Component({
+> child = {
+..  name: 'Child'
+..}
+> component = App({
 ..  name: 'Parent',
-..  child,
-..  view() {
-..    return 'Yes'
-..  }
-..}))
+..  child
+..})
 > component.child.name
 'Child'
 ```
@@ -245,20 +165,20 @@ Resolve: 'Alice'
 ## parent component can use child components' view
 JSX: `<p>comfort <child.view /></p>`
 ```js
-> child = Component({
+> child = {
 ..  name: 'Child',
 ..  view() {
 ..    return 'Waaah'
 ..  }
-..})
-> component = App(Component({
+..}
+> parent = App({
 .. name: 'Parent',
 .. child,
 .. view({child}) {
 ..   return h('p', {}, 'comfort ', h(child.view))
 ..  }
-..}))
-> component.view()
+..})
+> parent.view()
   ({
 ..  name: 'p',
 ..  attributes: {},
@@ -267,25 +187,170 @@ JSX: `<p>comfort <child.view /></p>`
 ..})
 ```
 
+## child component have their own state
+```js
+> child = {
+..  age: 'Child',
+..  view({age}) {
+..    return age
+..  }
+..}
+> parent = App({
+.. age: 'Such old',
+.. child,
+.. view({age, child}) {
+..   return `parent age: ${age}, child age: ${child.view()}`
+..  }
+..})
+> parent.view()
+'parent age: Such old, child age: Child'
+```
+
+## child component can update their own state
+```js
+> child = {
+..  age: 'Child',
+..  growUp() {
+..    return {
+..      age: 'Adult'
+..    }
+..  },
+..  view({age}) {
+..    return age
+..  }
+..}
+> parent = App({
+.. age: 'Such old',
+.. child,
+.. view({age, child}) {
+..   return `parent age: ${age}, child age: ${child.view()}`
+..  }
+..})
+> parent.child.growUp().then(() => parent.view())
+Resolve: 'parent age: Such old, child age: Adult'
+```
+
+## child components have access to parent state
+```js
+> child = {
+..  age: 'Child',
+..  view({$parent:{age: parentAge}}) {
+..    return parentAge
+..  }
+..}
+> parent = App({
+.. age: 'Such old',
+.. child,
+.. view({child}) {
+..   return `child's parent age: ${child.view()}`
+..  }
+..})
+> parent.view()
+'child\'s parent age: Such old'
+```
+
+## child components can update parent state
+```js
+> child = {
+..  age: 'Child',
+..  growUp() {
+..    return {
+..      $parent: {
+..        age: 'Such old and wise'
+..      }
+..    }
+..  },
+..  view({$parent:{age: parentAge}}) {
+..    return parentAge
+..  }
+..}
+> parent = App({
+.. age: 'Such old',
+.. child,
+.. view({child}) {
+..   return `child's parent age: ${child.view()}`
+..  }
+..})
+> parent.child.growUp().then(() => parent.view())
+Resolve: 'child\'s parent age: Such old and wise'
+```
+
+## child components have access to global state
+```js
+> grandchild = {
+..  age: 'Grandchild',
+..  view({$global: {age: grandparentAge}}) {
+..    return grandparentAge
+..  }
+..}
+> child = {
+..  age: 'Child',
+..  grandchild,
+..  view({age}) {
+..    return age
+..  }
+..}
+> parent = App({
+.. age: 'Such old',
+.. child,
+.. view({child: {grandchild}}) {
+..   return `grandchild's grandparent age: ${grandchild.view()}`
+..  }
+..})
+> parent.view()
+'grandchild\'s grandparent age: Such old'
+```
+
+## child components can update global state
+```js
+> grandchild = {
+..  age: 'Grandhild',
+..  growUp() {
+..    return {
+..      $global: {
+..        age: 'Such old and wise'
+..      }
+..    }
+..  },
+..  view({$global: {age: grandparentAge}}) {
+..    return grandparentAge
+..  }
+..}
+> child = {
+..  age: 'Child',
+..  grandchild,
+..  view({age}) {
+..    return age
+..  }
+..}
+> parent = App({
+.. age: 'Such old',
+.. child,
+.. view({child: {grandchild}}) {
+..   return `grandchild's grandparent age: ${grandchild.view()}`
+..  }
+..})
+> parent.child.grandchild.growUp().then(() => parent.view())
+Resolve: 'grandchild\'s grandparent age: Such old and wise'
+```
+
 ## state can be updated with data
 ```js
-> component = App(Component({
+> component = App({
 ..  name: 'Bob',
 ..  greet(state) {
 ..    return {
 ..      name: 'Alice'
 ..    }
-..  },
-..  view() {
 ..  }
-..}))
+..})
 > component.greet().then(() => component.name)
 Resolve: 'Alice'
 ```
 
 ## state can be updated with actions
 ```js
-> component = App(Component({
+> component = App({
 ..  rube(state) {
 ..    return {
 ..      goldberg(state) {
@@ -297,14 +362,14 @@ Resolve: 'Alice'
 ..  },
 ..  view() {
 ..  }
-..}))
+..})
 > component.rube().then(() => component.goldberg()).then(() => component.greeting)
 Resolve: 'Hello'
 ```
 
 ## state can update the view
 ```js
-> component = App(Component({
+> component = App({
 ..  naysayers(state) {
 ..    return {
 ..      view(state) {
@@ -315,63 +380,36 @@ Resolve: 'Hello'
 ..  view() {
 ..    return 'Yes'
 ..   }
-..}))
+..})
 > component.naysayers().then(() => component.view())
 Resolve: 'No'
 ```
 
 ## state can be updated with child components
 ```js
-> child = Component({
-..  name: 'Baby',
-..  view() {
-..  }
-..})
-> component = App(Component({
+> child = {
+..  name: 'Baby'
+..}
+> component = App({
 ..  veryMuch(state) {
 ..    return {
 ..      child
 ..    }
-..  },
-..  view() {
 ..  }
-..}))
+..})
 > component.veryMuch().then(() => component.child.name)
 Resolve: 'Baby'
 ```
 
-## state can be updated with an array of child components
-```js
-> child = Component({
-..  name: 'Baby',
-..  view() {
-..  }
-..})
-> component = App(Component({
-..  children: [],
-..  veryMuch(state) {
-..    return {
-..      children: [child]
-..    }
-..  },
-..  view() {
-..  }
-..}))
-> component.veryMuch().then(() => component.children[0].name)
-Resolve: 'Baby'
-```
-
-## `app(mainComponent, container)`
-
-### retuns the main component instance
+### App returns the main component instance
 ```js
 > resetTestRenderer()
-> main = App(Component({
+> main = App({
 ..  wired: true,
 ..  view({wired}) {
 ..    return `wired: ${wired}`
 ..  }
-..}))
+..})
 > main.view()
 'wired: true'
 ```
@@ -379,11 +417,11 @@ Resolve: 'Baby'
 ### main component is rendered
 ```js
 > resetTestRenderer()
-> main = App(Component({
+> App({
 ..  view() {
 ..    return 'hello'
 ..  }
-..}))
+..})
 > lastRendering
 Resolve: 'hello'
 ```
@@ -391,7 +429,7 @@ Resolve: 'hello'
 ### main component is re-rendered when state is updated
 ```js
 > resetTestRenderer()
-> main = App(Component({
+> main = App({
 ..  name: 'Bob',
 ..  greet() {
 ..    return {
@@ -401,7 +439,7 @@ Resolve: 'hello'
 ..  view({name}) {
 ..    return name
 ..  }
-..}))
+..})
 > lastRendering
 Resolve: 'Bob'
 > resetTestRenderer()
