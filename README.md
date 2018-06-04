@@ -35,6 +35,8 @@ App({
 }, document.getElementById('mainapp-entry'))
 ```
 
+`mainapp` is compatible with [picostyle](https://github.com/morishitter/picostyle).
+
 Main loop
 ---------
 <img src="https://cdn.rawgit.com/concept-not-found/mainapp/0b139598/docs/main-loop.svg" width="512" height="512"/>
@@ -123,13 +125,13 @@ const Counter = {
 }
 
 App({
-  counter: Counter
-  view({counter}) {
-    return <counter.view/>
+  Counter
+  view({Counter}) {
+    return <Counter/>
   }
 }, document.getElementById('mainapp-entry'))
 ```
-Each component has their own state. We use the `Counter` component multiple times and each will have their own `count`. Notice how the root view renders the `Counter` using `<counter.view/>`.
+Each component has their own state. We use the `Counter` component multiple times and each will have their own `count`. Notice how the root view renders the `Counter` using `<Counter/>`.
 
 ### Inversion of control
 Applications are simpler when the control flow is clear. When the control flow is spread all over the application, it is much harder to change. `mainapp` allows you to keep control at the root state tree.
@@ -154,17 +156,17 @@ const Grandchild = {
 
 const Child = {
   name: 'child',
-  grandchild: Grandchild,
-  view({grandchild}) {
-    return <grandchild.view/>
+  Grandchild,
+  view({Grandchild}) {
+    return <Grandchild/>
   }
 }
 
 App({
   name: 'root',
-  child: Child,
-  view({child}) {
-    return <child.view/>
+  Child,
+  view({Child}) {
+    return <Child/>
   }
 }, document.getElementById('mainapp-entry'))
 ```

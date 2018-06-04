@@ -1,12 +1,13 @@
 {
   "name": "mainapp",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "Mainapp is a micro web application framework",
   "main": "index.js",
   "scripts": {
     "lint": "eslint --fix .",
     "test": "spec-check h=./h AppFactory=./app-factory ./docs/specification.md",
-    "build": "rollup -c & rollup -c rollup.config.min.js"
+    "build": "rollup -c & rollup -c rollup.config.min.js",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "frontend",

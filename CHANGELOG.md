@@ -1,3 +1,6 @@
+## 4.0.0 (June 4, 2018)
+ * components can now be rendered by <Component/> instead of <Component.view/>
+
 ## 3.0.1 (June 1, 2018)
  * fixed readme images for npm
 

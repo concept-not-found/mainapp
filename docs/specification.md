@@ -56,18 +56,18 @@ In order make App more testable, we need to setup an internal api before we can 
 ```
 
 ## view has access to attributes from parent
-JSX: `<child.view key="value" />`
+JSX: `<Child key="value" />`
 ```js
-> child = {
+> Child = {
 ..  name: 'Child',
 ..  view(state, attributes) {
 ..    return JSON.stringify(attributes)
 ..  }
 ..}
 > App({
-..  child,
-..  view({child}) {
-..    return h(child.view, {
+..  Child,
+..  view({Child}) {
+..    return h(Child, {
 ..      key: 'value'
 ..    })
 ..  }
@@ -76,18 +76,18 @@ JSX: `<child.view key="value" />`
 ```
 
 ## view has access to children from parent
-JSX: `<child.view>mine</child.view>`
+JSX: `<Child>mine</Child>`
 ```js
-> child = {
+> Child = {
 ..  name: 'Child',
 ..  view(state, attributes, children) {
 ..    return JSON.stringify(children)
 ..  }
 ..}
 > App({
-..  child,
-..  view({child}) {
-..    return h(child.view, {}, 'mine')
+..  Child,
+..  view({Child}) {
+..    return h(Child, {}, 'mine')
 ..  }
 ..}).view()
 '["mine"]'
@@ -163,9 +163,9 @@ Resolve: 'Alice'
 ```
 
 ## parent component can use child components' view
-JSX: `<p>comfort <child.view /></p>`
+JSX: `<p>comfort <Child /></p>`
 ```js
-> child = {
+> Child = {
 ..  name: 'Child',
 ..  view() {
 ..    return 'Waaah'
@@ -173,9 +173,9 @@ JSX: `<p>comfort <child.view /></p>`
 ..}
 > parent = App({
 .. name: 'Parent',
-.. child,
-.. view({child}) {
-..   return h('p', {}, 'comfort ', h(child.view))
+.. Child,
+.. view({Child}) {
+..   return h('p', {}, 'comfort ', h(Child))
 ..  }
 ..})
 > parent.view()
@@ -189,7 +189,7 @@ JSX: `<p>comfort <child.view /></p>`
 
 ## child component have their own state
 ```js
-> child = {
+> Child = {
 ..  age: 'Child',
 ..  view({age}) {
 ..    return age
@@ -197,9 +197,9 @@ JSX: `<p>comfort <child.view /></p>`
 ..}
 > parent = App({
 .. age: 'Such old',
-.. child,
-.. view({age, child}) {
-..   return `parent age: ${age}, child age: ${child.view()}`
+.. Child,
+.. view({age, Child}) {
+..   return `parent age: ${age}, child age: ${Child.view()}`
 ..  }
 ..})
 > parent.view()
@@ -208,7 +208,7 @@ JSX: `<p>comfort <child.view /></p>`
 
 ## child component can update their own state
 ```js
-> child = {
+> Child = {
 ..  age: 'Child',
 ..  growUp() {
 ..    return {
@@ -221,18 +221,18 @@ JSX: `<p>comfort <child.view /></p>`
 ..}
 > parent = App({
 .. age: 'Such old',
-.. child,
-.. view({age, child}) {
-..   return `parent age: ${age}, child age: ${child.view()}`
+.. Child,
+.. view({age, Child}) {
+..   return `parent age: ${age}, child age: ${Child.view()}`
 ..  }
 ..})
-> parent.child.growUp().then(() => parent.view())
+> parent.Child.growUp().then(() => parent.view())
 Resolve: 'parent age: Such old, child age: Adult'
 ```
 
 ## child components have access to parent state
 ```js
-> child = {
+> Child = {
 ..  age: 'Child',
 ..  view({$parent:{age: parentAge}}) {
 ..    return parentAge
@@ -240,9 +240,9 @@ Resolve: 'parent age: Such old, child age: Adult'
 ..}
 > parent = App({
 .. age: 'Such old',
-.. child,
-.. view({child}) {
-..   return `child's parent age: ${child.view()}`
+.. Child,
+.. view({Child}) {
+..   return `child's parent age: ${Child.view()}`
 ..  }
 ..})
 > parent.view()
@@ -251,7 +251,7 @@ Resolve: 'parent age: Such old, child age: Adult'
 
 ## child components can update parent state
 ```js
-> child = {
+> Child = {
 ..  age: 'Child',
 ..  growUp() {
 ..    return {
@@ -266,35 +266,35 @@ Resolve: 'parent age: Such old, child age: Adult'
 ..}
 > parent = App({
 .. age: 'Such old',
-.. child,
-.. view({child}) {
-..   return `child's parent age: ${child.view()}`
+.. Child,
+.. view({Child}) {
+..   return `child's parent age: ${Child.view()}`
 ..  }
 ..})
-> parent.child.growUp().then(() => parent.view())
+> parent.Child.growUp().then(() => parent.view())
 Resolve: 'child\'s parent age: Such old and wise'
 ```
 
 ## child components have access to global state
 ```js
-> grandchild = {
+> Grandchild = {
 ..  age: 'Grandchild',
 ..  view({$global: {age: grandparentAge}}) {
 ..    return grandparentAge
 ..  }
 ..}
-> child = {
+> Child = {
 ..  age: 'Child',
-..  grandchild,
+..  Grandchild,
 ..  view({age}) {
 ..    return age
 ..  }
 ..}
 > parent = App({
 .. age: 'Such old',
-.. child,
-.. view({child: {grandchild}}) {
-..   return `grandchild's grandparent age: ${grandchild.view()}`
+.. Child,
+.. view({Child: {Grandchild}}) {
+..   return `grandchild's grandparent age: ${Grandchild.view()}`
 ..  }
 ..})
 > parent.view()
@@ -303,7 +303,7 @@ Resolve: 'child\'s parent age: Such old and wise'
 
 ## child components can update global state
 ```js
-> grandchild = {
+> Grandchild = {
 ..  age: 'Grandhild',
 ..  growUp() {
 ..    return {
@@ -316,21 +316,21 @@ Resolve: 'child\'s parent age: Such old and wise'
 ..    return grandparentAge
 ..  }
 ..}
-> child = {
+> Child = {
 ..  age: 'Child',
-..  grandchild,
+..  Grandchild,
 ..  view({age}) {
 ..    return age
 ..  }
 ..}
 > parent = App({
 .. age: 'Such old',
-.. child,
-.. view({child: {grandchild}}) {
-..   return `grandchild's grandparent age: ${grandchild.view()}`
+.. Child,
+.. view({Child: {Grandchild}}) {
+..   return `grandchild's grandparent age: ${Grandchild.view()}`
 ..  }
 ..})
-> parent.child.grandchild.growUp().then(() => parent.view())
+> parent.Child.Grandchild.growUp().then(() => parent.view())
 Resolve: 'grandchild\'s grandparent age: Such old and wise'
 ```
 
@@ -359,8 +359,6 @@ Resolve: 'Alice'
 ..        }
 ..      }
 ..    }
-..  },
-..  view() {
 ..  }
 ..})
 > component.rube().then(() => component.goldberg()).then(() => component.greeting)
@@ -387,17 +385,17 @@ Resolve: 'No'
 
 ## state can be updated with child components
 ```js
-> child = {
+> Child = {
 ..  name: 'Baby'
 ..}
 > component = App({
 ..  veryMuch(state) {
 ..    return {
-..      child
+..      Child
 ..    }
 ..  }
 ..})
-> component.veryMuch().then(() => component.child.name)
+> component.veryMuch().then(() => component.Child.name)
 Resolve: 'Baby'
 ```
 
