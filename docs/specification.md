@@ -11,7 +11,7 @@ In order make App more testable, we need to setup an internal api before we can 
 ..    }
 ..  })
 ..}
-> App = AppFactory((view) => () => saveRendering && saveRendering(view()))
+> App = AppFactory((view) => () => saveRendering && saveRendering(materialize(view())))
 ```
 
 ### when `name` is a String, return a node with name as the tag
@@ -36,22 +36,22 @@ In order make App more testable, we need to setup an internal api before we can 
 ### when `name` is a Function, return the result of the execution of the Function
 ```js
 > count = (attributes, children) => `attributes: ${Object.keys(attributes).length}, children: ${children.length}`
-> h(count, {
+> materialize(h(count, {
 ..  style: {
 ..    textAlign: 'center'
 ..  }
-..}, 'hello')
+..}, 'hello'))
 'attributes: 1, children: 1'
 ```
 
 ## view has access to state
 ```js
-> App({
+> materialize(App({
 ..  message: 'hello',
 ..  view({message}) {
 ..    return message
 ..  }
-..}).view()
+..}).view())
 'hello'
 ```
 
@@ -64,14 +64,14 @@ JSX: `<Child key="value" />`
 ..    return JSON.stringify(attributes)
 ..  }
 ..}
-> App({
+> materialize(App({
 ..  Child,
 ..  view({Child}) {
 ..    return h(Child, {
 ..      key: 'value'
 ..    })
 ..  }
-..}).view()
+..}).view())
 '{"key":"value"}'
 ```
 
@@ -84,12 +84,12 @@ JSX: `<Child>mine</Child>`
 ..    return JSON.stringify(children)
 ..  }
 ..}
-> App({
+> materialize(App({
 ..  Child,
 ..  view({Child}) {
 ..    return h(Child, {}, 'mine')
 ..  }
-..}).view()
+..}).view())
 '["mine"]'
 ```
 
@@ -178,7 +178,7 @@ JSX: `<p>comfort <Child /></p>`
 ..   return h('p', {}, 'comfort ', h(Child))
 ..  }
 ..})
-> parent.view()
+> materialize(parent.view())
   ({
 ..  name: 'p',
 ..  attributes: {},
@@ -202,7 +202,7 @@ JSX: `<p>comfort <Child /></p>`
 ..   return `parent age: ${age}, child age: ${Child.view()}`
 ..  }
 ..})
-> parent.view()
+> materialize(parent.view())
 'parent age: Such old, child age: Child'
 ```
 
@@ -226,7 +226,7 @@ JSX: `<p>comfort <Child /></p>`
 ..   return `parent age: ${age}, child age: ${Child.view()}`
 ..  }
 ..})
-> parent.Child.growUp().then(() => parent.view())
+> parent.Child.growUp().then(() => materialize(parent.view()))
 Resolve: 'parent age: Such old, child age: Adult'
 ```
 
@@ -245,7 +245,7 @@ Resolve: 'parent age: Such old, child age: Adult'
 ..   return `child's parent age: ${Child.view()}`
 ..  }
 ..})
-> parent.view()
+> materialize(parent.view())
 'child\'s parent age: Such old'
 ```
 
@@ -271,7 +271,7 @@ Resolve: 'parent age: Such old, child age: Adult'
 ..   return `child's parent age: ${Child.view()}`
 ..  }
 ..})
-> parent.Child.growUp().then(() => parent.view())
+> parent.Child.growUp().then(() => materialize(parent.view()))
 Resolve: 'child\'s parent age: Such old and wise'
 ```
 
@@ -297,7 +297,7 @@ Resolve: 'child\'s parent age: Such old and wise'
 ..   return `grandchild's grandparent age: ${Grandchild.view()}`
 ..  }
 ..})
-> parent.view()
+> materialize(parent.view())
 'grandchild\'s grandparent age: Such old'
 ```
 
@@ -330,7 +330,7 @@ Resolve: 'child\'s parent age: Such old and wise'
 ..   return `grandchild's grandparent age: ${Grandchild.view()}`
 ..  }
 ..})
-> parent.Child.Grandchild.growUp().then(() => parent.view())
+> parent.Child.Grandchild.growUp().then(() => materialize(parent.view()))
 Resolve: 'grandchild\'s grandparent age: Such old and wise'
 ```
 
@@ -379,7 +379,7 @@ Resolve: 'Hello'
 ..    return 'Yes'
 ..   }
 ..})
-> component.naysayers().then(() => component.view())
+> component.naysayers().then(() => materialize(component.view()))
 Resolve: 'No'
 ```
 
@@ -408,7 +408,7 @@ Resolve: 'Baby'
 ..    return `wired: ${wired}`
 ..  }
 ..})
-> main.view()
+> materialize(main.view())
 'wired: true'
 ```
 

@@ -1,3 +1,6 @@
+## 5.0.0 (June 5, 2018)
+ * render views just in time instead of eagerly to allow parent views to modify attribute of children
+
 ## 4.0.0 (June 4, 2018)
  * components can now be rendered by <Component/> instead of <Component.view/>
 
