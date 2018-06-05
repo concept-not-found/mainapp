@@ -1,3 +1,6 @@
+## 5.1.0 (June 5, 2018)
+ * added component lifecycle `didMount` and `willUnmount`
+
 ## 5.0.0 (June 5, 2018)
  * render views just in time instead of eagerly to allow parent views to modify attribute of children
 

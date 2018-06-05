@@ -1,11 +1,24 @@
 const isPlainObject = require('is-plain-object')
 
+async function unmount (state, key) {
+  const child = state[key]
+  if (isPlainObject(child)) {
+    if (child.willUnmount) {
+      await child.willUnmount(key)
+      delete child.willUnmount
+    }
+    for (let childKey in child) {
+      await unmount(child, childKey)
+    }
+  }
+}
 module.exports = (onStateUpdate, mainSpecification) => {
   const $global = {}
   function wireSpecification (specification, state) {
     for (const key in specification) {
       const value = specification[key]
       if (value === undefined) {
+        unmount(state, key)
         delete state[key]
       } else if (key === 'view') {
         state[key] = (attributes, children) => value(state, attributes, children)
@@ -47,6 +60,11 @@ module.exports = (onStateUpdate, mainSpecification) => {
             configurable: false
           })
           state[key] = wireSpecification(value, childState)
+          const child = state[key]
+          if (child.didMount) {
+            child.didMount(key)
+            delete child.didMount
+          }
         }
       } else { // data
         state[key] = value

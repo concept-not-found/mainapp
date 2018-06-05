@@ -399,6 +399,98 @@ Resolve: 'No'
 Resolve: 'Baby'
 ```
 
+## didMount fires when child component is mounted
+```js
+> Child = {
+..  mountedAt: undefined,
+..  didMount(state, parentKey) {
+..    return {
+..      mountedAt: parentKey
+..    }
+..  },
+..  view({mountedAt}) {
+..    return mountedAt
+..  }
+..}
+> parent = App({
+..  count: 0,
+..  children: {},
+..  addChild({count, children}) {
+..    return {
+..      count: count + 1,
+..      children: {
+..        ...children,
+..        [count + 1]: Child
+..      }
+..    }
+..  },
+..  view ({children}) {
+..    return JSON.stringify(children)
+..  }
+..})
+> parent.addChild().then(() => materialize(parent.view()))
+Resolve: '{"1":{"mountedAt":"1"}}'
+```
+
+## willUnmount fires on child when child component is about to be unmounted
+```js
+> parent = App({
+..  messages: [],
+..  addMessage({messages}, message) {
+..    return {
+..      messages: [...messages, message]
+..    }
+..  },
+..  Child: {
+..    willUnmount({$global: {addMessage}}, parentKey) {
+..      addMessage(`goodbye from ${parentKey}`)
+..    }
+..  },
+..  removeChild() {
+..    return {
+..      Child: undefined
+..    }
+..  },
+..  view ({messages}) {
+..    return messages
+..  }
+..})
+> parent.removeChild().then(() => materialize(parent.view()))
+Resolve: ['goodbye from Child']
+```
+
+## willUnmount fires on grandchild when child component is about to be unmounted
+```js
+> parent = App({
+..  messages: [],
+..  addMessage({messages}, message) {
+..    return {
+..      messages: [...messages, message]
+..    }
+..  },
+..  Child: {
+..    willUnmount({$global: {addMessage}}, parentKey) {
+..      addMessage(`goodbye from ${parentKey}!`)
+..    },
+..    Grandchild: {
+..      willUnmount({$global: {addMessage}}, parentKey) {
+..        addMessage(`goodbye from ${parentKey}!!`)
+..      }
+..    }
+..  },
+..  removeChild() {
+..    return {
+..      Child: undefined
+..    }
+..  },
+..  view ({messages}) {
+..    return messages
+..  }
+..})
+> parent.removeChild().then(() => new Promise((resolve) => setTimeout(resolve, 100))).then(() => materialize(parent.view()))
+Resolve: ['goodbye from Child!', 'goodbye from Grandchild!!']
+```
+
 ### App returns the main component instance
 ```js
 > resetTestRenderer()

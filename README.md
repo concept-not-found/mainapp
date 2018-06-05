@@ -125,13 +125,60 @@ const Counter = {
 }
 
 App({
-  Counter
+  Counter,
   view({Counter}) {
     return <Counter/>
   }
 }, document.getElementById('mainapp-entry'))
 ```
 Each component has their own state. We use the `Counter` component multiple times and each will have their own `count`. Notice how the root view renders the `Counter` using `<Counter/>`.
+
+#### Lifecycles
+Components can declare lifecycle actions `didMount` and `willUnmount`.
+
+ * `didMount(state, parentKey)`: an action on a child component which is called **once** after mounted on the parent. The `parentKey` is the key on the parent where the child component was mounted. Use this lifecycle to do one time setup with external APIs.
+ * `willUnmount(state, parentKey)`: an action on a child component which is called **once** before unmounted from the parent. The `parentKey` is the key on the parent where the child component was mounted. Use this lifecycle to clean up things setup with `didMount`. `willUnmount` will be called transitively the entire component sub-tree if ancestor is umounted.
+
+Here is an example on how to use `didMount` and `willUnmount` to attach and clean up event listeners.
+```js
+const {mountOnline, unmountOnline} = App({
+  mountOnline() {
+    return {
+      Online: {
+        online: 'unknown',
+        wentOnline() {
+          return {
+            online: 'yes'
+          }
+        },
+        didMount({wentOnline}) {
+          window.addEventListener('online', wentOnline)
+        },
+        willUnmount({wentOnline}) {
+          window.removeEventListener('online', wentOnline)
+        },
+        view({online}) {
+          return <p>Online: {online}</p>
+        }
+      },
+    }
+  },
+  unmountOnline() {
+    return {
+      Online: undefined
+    }
+  },
+  view({Online}) {
+    return {Online && <Online/>}
+  }
+}, document.getElementById('mainapp-entry'))
+
+await mountOnline()
+// didMount fires
+
+await unmountOnline()
+// willUnmount fires
+```
 
 ### Inversion of control
 Applications are simpler when the control flow is clear. When the control flow is spread all over the application, it is much harder to change. `mainapp` allows you to keep control at the root state tree.
